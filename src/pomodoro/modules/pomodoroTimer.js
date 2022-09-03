@@ -326,6 +326,9 @@ export default class PomodoroTimer {
             return null;
         }
 
+        if (time === null || state === null || settings === null)
+            return null;
+
         this.setTime(time);
         this.setState(state);
         this.setSettings(settings);

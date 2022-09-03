@@ -183,8 +183,6 @@ export default function Pomodoro(props) {
 
         pomodoroRef.current.loadData();
 
-        console.log(pomodoroRef.current);
-
         audioRef.current = new Audio(blip);
 
         settingsRef.current = pomodoroRef.current.getSettings();
