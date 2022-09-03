@@ -62,7 +62,7 @@ export default function Settings(props) {
 
             <footer className="message">
                 <p>
-                    settings will be&nbsp;applied automatically, as&nbsp;soon as&nbsp;you change them
+                    settings will be&nbsp;applied automatically, as&nbsp;soon as&nbsp;you close this menu
                 </p>
             </footer>
         </div>
