@@ -1,57 +1,41 @@
-/**
- * Checks if arg is a function
- * @param {*} arg - argument to check
- * @param {function} stub - function to return, if arg is not a function
- * @returns arg, if it is a function, if not - returns stub instead
- */
-export function checkFunctionArgument(arg, stub = ((() => { }))) {
-    return (typeof (arg) == 'function' && arg) || stub;
-};
+import { checkFunctionArgument, checkNumberArgument } from "./checkUtils";
 
 /**
- * Checks if arg is a number
- * @param {*} arg - argument to check
- * @param {number} stub - number to return, if arg is not a number
- * @returns arg, if it is a number, if not - returns stub instead
+ * Represents a countdown timer
  */
-export function checkNumberArgument(arg, stub = 0) {
-    if (typeof (+arg) == 'number')
-        return arg; 
-    return stub;
-}
-
 export default class Timer {
-
     /**
-     * Represents countdon timer
-     * @param {number} time - time to countdown (seconds)
-     * @param {function} onTick - function that will be executed every tick (also receives time as an argument)
-     * @param {function} onStop - function that will be executed when time runs out
+     * Represents a countdown timer
+     * @param {number} time - time to countdown in seconds
      */
-    constructor(time, onTick, onStop) {
-
+    constructor(time) {
         /**
          * remaining time in seconds
          */
-        this._time = checkNumberArgument(time, 60);
+        this._time = checkNumberArgument(time);
 
         /**
-         * function that will be executed every tick
-         * 
-         * also gets current remaining time as an argument
+         * SetInterval timer
          */
-        this._onTick = checkFunctionArgument(onTick);
-
-        /**
-         * function that will be executed when time runs out
-         */
-        this._onStop = checkFunctionArgument(onStop);
-
         this._timer = null;
+
+        /**
+         * events that timer will be firing
+         */
+        this._events = {
+            /**
+             * fires when time changes
+             */
+            onTick: ((time) => { console.log(`Tick : ${time}`); }),
+            /**
+             * fires when time is ran out
+             */
+            onStop: (() => { console.log(`Timer stopped`); })
+        };
     }
 
     /**
-     * Sets new remaining time
+     * Sets new time
      * @param {number} value - new time value in seconds
      */
     setTime(value) {
@@ -59,50 +43,43 @@ export default class Timer {
     }
 
     /**
-     * Returns remaining time
-     * @returns remianing time (seconds)
+     * Returns current time
+     * @returns remaining time in seconds
      */
     getTime() {
         return this._time;
     }
 
     /**
-     * Sets new onTick function
-     * @param {function} func - new onTick function
+     * Sets events
+     * @param {object} value - object with new events
      */
-    setOnTick(func) {
-        this._onTick = checkFunctionArgument(func, this.onTick);
+    setEvents(value) {
+        this._events = value && {
+            onTick: checkFunctionArgument(value.onTick, this._events.onTick),
+            onStop: checkFunctionArgument(value.onStop, this._events.onStop)
+        }
     }
 
-    /**
-     * Sets new onStop function
-     * @param {function} func - new onStop function
-     */
-    setOnStop(func) {
-        this._onStop = checkFunctionArgument(func, this._onStop);
+    _tick() {
+        if (this._time === 0) {
+            this.stop();
+            this._events.onStop();
+        }
+        else {
+            this._time--;
+            this._events.onTick(this._time);
+        }
     }
 
     /**
      * Starts timer
      */
     start() {
-        let self = this;
-
-        function tick() {
-            if (self._time <= 0) {
-                self.stop();
-                self._onStop();
-            }
-            else {
-                self._time--;
-                self._onTick(self._time);
-            }
-            console.log(self._time);
-        }
-
+        // clearing interval before initializing new one (just in case)
         this.stop();
-
-        this._timer = setInterval(tick, 1000);
+        // start
+        this._timer = setInterval(this._tick.bind(this), 1000);
     }
 
     /**
