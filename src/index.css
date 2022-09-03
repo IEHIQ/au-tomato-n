@@ -1,0 +1,66 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body,
+html,
+#root {
+    width: 100vw;
+    height: 100vh;
+}
+
+button {
+    outline: none;
+    border: none;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace;
+}
+
+.non-selectable {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+
+@font-face {
+    font-family: 'Onest';
+    src: url('./fonts/Onest/WOFF/OnestLight1602-hint.woff') format('woff'),
+        url('./fonts/Onest/TTF/OnestLight1602-hint.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 200;
+    text-rendering: optimizeLegibility;
+}
+
+@font-face {
+    font-family: 'Onest';
+    src: url('./fonts/Onest/WOFF/OnestRegular1602-hint.woff') format('woff'),
+        url('./fonts/Onest/TTF/OnestRegular1602-hint.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 400;
+    text-rendering: optimizeLegibility;
+}
+
+@font-face {
+    font-family: 'Onest';
+    src: url('./fonts/Onest/WOFF/OnestBold1602-hint.woff') format('woff'),
+        url('./fonts/Onest/TTF/OnestBold1602-hint.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 700;
+    text-rendering: optimizeLegibility;
+}
