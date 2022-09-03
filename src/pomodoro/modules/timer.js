@@ -43,7 +43,7 @@ export default class Timer {
     }
 
     /**
-     * Returns current time
+     * Returns remaining time
      * @returns remaining time in seconds
      */
     getTime() {
@@ -61,6 +61,9 @@ export default class Timer {
         }
     }
 
+    /**
+     * function that will be executed on every timer tick (every second basically)
+     */
     _tick() {
         if (this._time === 0) {
             this.stop();

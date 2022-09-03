@@ -31,7 +31,6 @@ function SettingsItem(props) {
                 max={max}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                placeholder={''}
                 value={props.value}
             />
         </div>

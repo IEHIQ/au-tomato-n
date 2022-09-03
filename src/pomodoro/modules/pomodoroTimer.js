@@ -2,6 +2,9 @@ import { checkFunctionArgument, checkNumberArgument } from "./checkUtils.js";
 import Timer from "./timer.js";
 
 export default class PomodoroTimer {
+    /**
+     * Represents pomodoro-technique timer
+     */
     constructor() {
         this._settings = {
             workTime: 25,
@@ -47,11 +50,18 @@ export default class PomodoroTimer {
         this._timer = new Timer(this._settings.workTime * 60);
     }
 
+    /**
+     * Returns current phase remaining time in {h: <hours>, m: <minutes>, s: <seconds>} format
+     * @returns time object in {h: <hours>, m: <minutes>, s: <seconds>} format
+     */
     getDetailedTime() {
         return this._detailedTime;
     }
 
-    _resetDetailedTime() {
+    /**
+     * refreshes detailed time 
+     */
+    _refreshDetailedTime() {
         this._detailedTime = {
             h: Math.floor(this._time / 3600),
             m: Math.floor(this._time % 3600 / 60),
@@ -63,10 +73,18 @@ export default class PomodoroTimer {
         this._events.onSecondsChange(this._detailedTime.s);
     }
 
+    /**
+     * Returns timer state (cycle and phase)
+     * @returns timer state object
+     */
     getState() {
         return this._state;
     }
 
+    /**
+     * Sets new timer state (cycle and phase)
+     * @param {object} state - new state
+     */
     setState(state) {
         this._state = (state && {
             cycle: checkNumberArgument(state.cycle, this._state.cycle),
@@ -76,10 +94,18 @@ export default class PomodoroTimer {
         this._events.onPhaseChange(this._state.phase);
     }
 
+    /**
+     * Returns timer settings
+     * @returns timer settings object
+     */
     getSettings() {
         return this._settings;
     }
 
+    /**
+     * Sets new timer settings
+     * @param {object} settings - new settings 
+     */
     setSettings(settings) {
         this._settings = settings && {
             workTime: checkNumberArgument(settings.workTime, this._settings.workTime),
@@ -89,6 +115,10 @@ export default class PomodoroTimer {
         };
     }
 
+    /**
+     * Sets timer events
+     * @param {object} events - object with event/s 
+     */
     setEvents(events) {
         this._events = events && {
             onTick: checkFunctionArgument(events.onTick, this._events.onTick),
@@ -112,22 +142,32 @@ export default class PomodoroTimer {
         }
     }
 
+    /**
+     * Sets new remaining time for a phase
+     * @param {number} time - new remaining time in seconds 
+     */
     setTime(time) {
         this._time = checkNumberArgument(time, this._time);
         this._events.onTick(this._time);
-        this._resetDetailedTime();
+        this._refreshDetailedTime();
 
         this._timer._time = this._time;
     }
 
+    /**
+     * Resets remaining time to work phase according to settings
+     */
     resetTime() {
         this._time = this._settings.workTime * 60;
         this._events.onTick(this._time);
-        this._resetDetailedTime();
+        this._refreshDetailedTime();
 
         this._timer._time = this._time;
     }
 
+    /**
+     * Resets whole timer according to settings
+     */
     reset() {
         this._state.cycle = 0;
         this._state.phase = 0;
@@ -138,6 +178,9 @@ export default class PomodoroTimer {
         this.resetTime();
     }
 
+    /**
+     * function that will be executed on every timer tick
+     */
     _tick() {
         this._time = this._timer._time;
         this._events.onTick(this._time);
@@ -170,6 +213,9 @@ export default class PomodoroTimer {
         }
     }
 
+    /**
+     * function that will be executed every time when phase is changing
+     */ 
     _handlePhaseSwitch() {
         // work/break phase switched
         this._state.phase = (this._state.phase + 1) % 2;
@@ -199,7 +245,7 @@ export default class PomodoroTimer {
             }
         }
 
-        this._resetDetailedTime();
+        this._refreshDetailedTime();
         this._events.onTick(this._time);
 
         // switching phase
@@ -211,6 +257,9 @@ export default class PomodoroTimer {
         this._timer.start();
     }
 
+    /**
+     * Starts timer
+     */
     start() {
         this._timer.setEvents({
             onTick: this._tick.bind(this),
@@ -290,6 +339,9 @@ export default class PomodoroTimer {
         return [time, state, settings];
     }
 
+    /**
+     * Clears localStorage
+     */
     clearData() {
         window.localStorage.clear();
 
